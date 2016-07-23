@@ -7,6 +7,14 @@ The vision is to have a Docker image that will run once to autoscale marathon ap
 
 I envision multiple (pluggable) backends that will be used. The actual scale up and down is a stable interface that should only change if upstream changes API spec.
 
+Backend Support:
+
+| Backend | Status |
+| ----- | ----- |
+| LogicMonitor | Supported |
+| AWS CloudWatch | On Deck |
+| Others? | ??? |
+
 ## Running
 It should be very east to run this wherever `marathon.mesos` resolves to the correct address (requires mesos-dns somewhere). Docker is used to provide a simple interface to run (though, it isn't too complicated if you choose to decompose it)
 
