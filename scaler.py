@@ -17,7 +17,8 @@ if os.environ.get('POLL_SERVICE') == "logicmonitor":
     payload = {'c': LM_COMPANY, 'u': LM_USER, 'p': LM_PASS, 'host': LM_HOST,
         'dataSource': LM_DATASOURCE, 'dataPoint0': LM_DATAPOINT,
         'start': epoch - 180, 'end': epoch }
-    r = requests.get('https://spscommerce.logicmonitor.com/santaba/rpc/getData', params=payload)
+    uri = "https://" + LM_COMPANY + ".logicmonitor.com/santaba/rpc/getData"
+    r = requests.get(uri, params=payload)
 
     totalvalue = 0
     value = 0
