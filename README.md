@@ -16,7 +16,7 @@ Backend Support:
 | Others? | ??? |
 
 ## Running
-It should be very east to run this wherever `marathon.mesos` resolves to the correct address (requires mesos-dns somewhere). Docker is used to provide a simple interface to run (though, it isn't too complicated if you choose to decompose it)
+It should be very easy to run this wherever `marathon.mesos` resolves to the correct address (requires mesos-dns somewhere). Docker is used to provide a simple interface to run (though, it isn't too complicated if you choose to decompose it)
 
 There are many environment variables in lieu of a config file or parameters to make this as re-usable as possible. They get passed to the Docker runtime. Backend specific variables have a common prefix and can be omitted it not used.
 

@@ -38,7 +38,7 @@ if os.environ.get('POLL_SERVICE') == "logicmonitor":
         # The really, really nice thing about using percentages is that marathon
         # will never round down, only up. So, for example, starting at 100 and
         # scaling down by 80% will eventually converge at 4, not going below.
-        # Every percentage has a number it will converge to.
+        # Every percentage has a number it will converge to. 10% -> 9, etc
         factor = "." + str(100 - int(os.environ.get("SCALE_DOWN_PERCENT")))
         body = json.dumps({u"scaleBy": float(factor)})
     else:
