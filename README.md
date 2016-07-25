@@ -13,7 +13,7 @@ Backend Support:
 | ----- | ----- | ----- |
 | LogicMonitor | Supported | logicmonitor |
 | AWS CloudWatch | Supported | cloudwatch |
-| Others? | ??? | |
+| Others? | ??? | <nbsp> |
 
 ## Running
 It should be very easy to run this wherever `marathon.mesos` resolves to the correct address (requires mesos-dns somewhere). Docker is used to provide a simple interface to run (though, it isn't too complicated if you choose to decompose it)
