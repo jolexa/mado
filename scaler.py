@@ -5,6 +5,28 @@ import time
 import requests
 import json
 
+def do_scaling(value):
+    if value > os.environ.get('THRESHOLD'):
+        print "Scaling Up.."
+        factor = "1." + os.environ.get("SCALE_UP_PERCENT")
+        body = json.dumps({u"scaleBy": float(factor)})
+    elif value < os.environ.get('THRESHOLD'):
+        print "Scaling Down.."
+        # The really, really nice thing about using percentages is that marathon
+        # will never round down, only up. So, for example, starting at 100 and
+        # scaling down by 80% will eventually converge at 4, not going below.
+        # Every percentage has a number it will converge to. 10% -> 9, etc
+        factor = "0." + os.environ.get("SCALE_DOWN_PERCENT")
+        body = json.dumps({u"scaleBy": float(factor)})
+    else:
+        print "No Change"
+
+    uri = "http://marathon.mesos:8080/v2/groups/" + os.environ.get('MARATHON_APP_GROUP')
+    if body:
+        print "DEBUG: Calling: {0}, with payload: {1}".format(uri, body)
+        r = requests.put(uri, data=body )
+        print r.text
+
 if os.environ.get('POLL_SERVICE') == "logicmonitor":
     LM_COMPANY = os.environ.get('LM_COMPANY')
     LM_USER = os.environ.get('LM_USER')
@@ -30,23 +52,8 @@ if os.environ.get('POLL_SERVICE') == "logicmonitor":
             totalvalue += value
     print "DEBUG: there is a cumulative queuedepth of: {0}, past 3 minutes".format(totalvalue)
 
-    uri = "http://marathon.mesos:8080/v2/groups/" + os.environ.get('MARATHON_APP_GROUP')
-    if totalvalue > os.environ.get('THRESHOLD'):
-        factor = "1." + os.environ.get("SCALE_UP_PERCENT")
-        body = json.dumps({u"scaleBy": float(factor)})
-    elif totalvalue < os.environ.get('THRESHOLD'):
-        # The really, really nice thing about using percentages is that marathon
-        # will never round down, only up. So, for example, starting at 100 and
-        # scaling down by 80% will eventually converge at 4, not going below.
-        # Every percentage has a number it will converge to. 10% -> 9, etc
-        factor = "." + str(100 - int(os.environ.get("SCALE_DOWN_PERCENT")))
-        body = json.dumps({u"scaleBy": float(factor)})
-    else:
-        print "No Change"
+    do_scaling(totalvalue)
 
-    if body:
-        print "DEBUG: Calling: {0}, with payload: {1}".format(uri, body)
-        r = requests.put(uri, data=body )
-        print r.text
+
 else:
     print "POLL_SERVICE is not supported yet"
