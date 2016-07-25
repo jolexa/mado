@@ -4,6 +4,8 @@ import os
 import time
 import requests
 import json
+from datetime import timedelta
+from datetime import datetime
 
 def do_scaling(value):
     if value > os.environ.get('THRESHOLD'):
@@ -51,9 +53,36 @@ if os.environ.get('POLL_SERVICE') == "logicmonitor":
             value = dp[2]
             totalvalue += value
     print "DEBUG: there is a cumulative queuedepth of: {0}, past 3 minutes".format(totalvalue)
-
     do_scaling(totalvalue)
 
+elif os.environ.get('POLL_SERVICE') == "cloudwatch":
+    import boto3
+    client = boto3.client('cloudwatch')
+
+    AG_TYPE = os.environ.get('CW_AGGREGATION_TYPE')
+    response = client.get_metric_statistics(
+        Namespace=os.environ.get('CW_NAMESPACE'),
+        MetricName=os.environ.get('CW_METRIC'),
+        StartTime=datetime.utcnow() - timedelta(minutes=3),
+        EndTime=datetime.utcnow(),
+        Period=60,
+        Statistics=[ AG_TYPE ],
+        Dimensions=[
+            {'Name': os.environ.get('CW_DIMENSION_NAME'), 'Value': os.environ.get('CW_DIMENSION_NAME')"}
+        ])
+    value = float(0)
+    total = float(0)
+    counter = 0
+    for i in response["Datapoints"]:
+        counter += 1
+        print "DEBUG: Iterating on value: " + str(i[AG_TYPE])
+        if AG_TYPE == "Maximum":
+            totalvalue += i[AG_TYPE]
+        elif AG_TYPE == "Average"
+            total += i[AG_TYPE]
+            value = total / counter
+    print "DEBUG: Type: {0}, is value: {1}".format(AG_TYPE, value)
+    do_scaling(value)
 
 else:
     print "POLL_SERVICE is not supported yet"
