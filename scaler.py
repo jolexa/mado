@@ -68,21 +68,26 @@ elif os.environ.get('POLL_SERVICE') == "cloudwatch":
         Period=60,
         Statistics=[ AG_TYPE ],
         Dimensions=[
-            {'Name': os.environ.get('CW_DIMENSION_NAME'), 'Value': os.environ.get('CW_DIMENSION_NAME')"}
+            {'Name': os.environ.get('CW_DIMENSION_NAME'), 'Value': os.environ.get('CW_DIMENSION_VALUE')}
         ])
     value = float(0)
     total = float(0)
     counter = 0
+    skip = False
+    if not response["Datapoints"]:
+        print "No Data to work on"
+        skip = True
     for i in response["Datapoints"]:
         counter += 1
         print "DEBUG: Iterating on value: " + str(i[AG_TYPE])
         if AG_TYPE == "Maximum":
-            totalvalue += i[AG_TYPE]
-        elif AG_TYPE == "Average"
+            value += i[AG_TYPE]
+        elif AG_TYPE == "Average":
             total += i[AG_TYPE]
             value = total / counter
     print "DEBUG: Type: {0}, is value: {1}".format(AG_TYPE, value)
-    do_scaling(value)
+    if not skip:
+        do_scaling(value)
 
 else:
     print "POLL_SERVICE is not supported yet"
