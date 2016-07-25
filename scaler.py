@@ -28,7 +28,7 @@ if os.environ.get('POLL_SERVICE') == "logicmonitor":
         if dp[2] != "NaN":
             value = dp[2]
             totalvalue += value
-    print "DEBUG: there is a queuedepth of: {0}".format(totalvalue)
+    print "DEBUG: there is a cumulative queuedepth of: {0}, past 3 minutes".format(totalvalue)
 
     uri = "http://marathon.mesos:8080/v2/groups/" + os.environ.get('MARATHON_APP_GROUP')
     if totalvalue > os.environ.get('THRESHOLD'):
@@ -44,8 +44,8 @@ if os.environ.get('POLL_SERVICE') == "logicmonitor":
     else:
         print "No Change"
 
-    print "DEBUG: Would run: {0}, payload: {1}".format(uri, json)
     if body:
+        print "DEBUG: Calling: {0}, with payload: {1}".format(uri, body)
         r = requests.put(uri, data=body )
         print r.text
 else:
