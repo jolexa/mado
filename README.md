@@ -24,7 +24,7 @@ Common:
 
 | Variable | Description |
 | ------ | ------ |
-| POLL_SERVICE | Supporting Services for polling. See key above for support |
+| BACKEND_SERVICE | Supporting Services for polling. See key above for support |
 | THRESHOLD | Threshold to take action |
 | SCALE_UP_PERCENT | *(int)* Percentage to scale the MARATHON_APP_GROUP |
 | SCALE_DOWN_PERCENT | *(int)* Percentage to scale the MARATHON_APP_GROUP |

@@ -29,7 +29,7 @@ def do_scaling(value):
         r = requests.put(uri, data=body )
         print r.text
 
-if os.environ.get('POLL_SERVICE') == "logicmonitor":
+if os.environ.get('BACKEND_SERVICE') == "logicmonitor":
     LM_COMPANY = os.environ.get('LM_COMPANY')
     LM_USER = os.environ.get('LM_USER')
     LM_PASS = os.environ.get('LM_PASS')
@@ -55,7 +55,7 @@ if os.environ.get('POLL_SERVICE') == "logicmonitor":
     print "DEBUG: there is a cumulative queuedepth of: {0}, past 3 minutes".format(totalvalue)
     do_scaling(totalvalue)
 
-elif os.environ.get('POLL_SERVICE') == "cloudwatch":
+elif os.environ.get('BACKEND_SERVICE') == "cloudwatch":
     import boto3
     client = boto3.client('cloudwatch')
 
@@ -90,4 +90,4 @@ elif os.environ.get('POLL_SERVICE') == "cloudwatch":
         do_scaling(value)
 
 else:
-    print "POLL_SERVICE is not supported yet"
+    print "BACKEND_SERVICE is not supported yet"
