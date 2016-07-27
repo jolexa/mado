@@ -28,6 +28,8 @@ Common:
 | THRESHOLD | Threshold to take action |
 | SCALE_UP_PERCENT | *(int)* Percentage to scale the MARATHON_APP_GROUP |
 | SCALE_DOWN_PERCENT | *(int)* Percentage to scale the MARATHON_APP_GROUP |
+| SCALE_FLOOR | *(int)* (Optional) Lowest desired number of instances in a group |
+| SCALE_CEILING | *(int)* (Optional) Highest desired number of instances in a group |
 | MARATHON_APP_GROUP | Group of apps to scale |
 
 LogicMonitor:

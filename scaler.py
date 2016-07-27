@@ -7,19 +7,55 @@ import json
 from datetime import timedelta
 from datetime import datetime
 
+def get_current_count_by_group(group):
+    # This is an rough science, as we are checking for the entire group, not an
+    # individual application
+    uri = "http://marathon.mesos:8080/v2/groups/" + os.environ.get('MARATHON_APP_GROUP')
+    r = requests.get(uri)
+    instances = 0
+    for app in r.json()["apps"]:
+        instances += app["instances"]
+    return instances
+
 def do_scaling(value):
+    try:
+        FLOOR = os.environ["SCALE_FLOOR"]
+    except KeyError:
+        FLOOR = False
+    try:
+        CEILING = os.environ["SCALE_CEILING"]
+    except KeyError:
+        CEILING = False
+
     if value > os.environ.get('THRESHOLD'):
-        print "Scaling Up.."
-        factor = "1." + os.environ.get("SCALE_UP_PERCENT")
-        body = json.dumps({u"scaleBy": float(factor)})
+        if CEILING:
+            if CEILING > get_current_count_by_group(os.environ.get('MARATHON_APP_GROUP')):
+                print "SCALE_CEILING is not met. Scaling Up.."
+                factor = "1." + os.environ.get("SCALE_UP_PERCENT")
+                body = json.dumps({u"scaleBy": float(factor)})
+            else
+                print "CEILING is already met, not proceeding"
+        else
+            print "SCALE_CEILING is not set, so scaling up. Potential runaway scaling possibility."
+            factor = "1." + os.environ.get("SCALE_UP_PERCENT")
+            body = json.dumps({u"scaleBy": float(factor)})
+
     elif value < os.environ.get('THRESHOLD'):
-        print "Scaling Down.."
         # The really, really nice thing about using percentages is that marathon
         # will never round down, only up. So, for example, starting at 100 and
         # scaling down by 80% will eventually converge at 4, not going below.
         # Every percentage has a number it will converge to. 10% -> 9, etc
-        factor = "0." + os.environ.get("SCALE_DOWN_PERCENT")
-        body = json.dumps({u"scaleBy": float(factor)})
+        if FLOOR:
+            if FLOOR < get_current_count_by_group(os.environ.get('MARATHON_APP_GROUP')):
+                print "SCALE_FLOOR is not met. Scaling Down.."
+                factor = "0." + os.environ.get("SCALE_DOWN_PERCENT")
+                body = json.dumps({u"scaleBy": float(factor)})
+            else
+                print "FLOOR is already met, not proceeding"
+        else
+            print "SCALE_FLOOR is not set, so scaling down. Potential to be below desired capacity."
+            factor = "0." + os.environ.get("SCALE_DOWN_PERCENT")
+            body = json.dumps({u"scaleBy": float(factor)})
     else:
         print "No Change"
 
