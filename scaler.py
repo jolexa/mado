@@ -33,9 +33,9 @@ def do_scaling(value):
                 print "SCALE_CEILING is not met. Scaling Up.."
                 factor = "1." + os.environ.get("SCALE_UP_PERCENT")
                 body = json.dumps({u"scaleBy": float(factor)})
-            else
+            else:
                 print "CEILING is already met, not proceeding"
-        else
+        else:
             print "SCALE_CEILING is not set, so scaling up. Potential runaway scaling possibility."
             factor = "1." + os.environ.get("SCALE_UP_PERCENT")
             body = json.dumps({u"scaleBy": float(factor)})
@@ -50,9 +50,9 @@ def do_scaling(value):
                 print "SCALE_FLOOR is not met. Scaling Down.."
                 factor = "0." + os.environ.get("SCALE_DOWN_PERCENT")
                 body = json.dumps({u"scaleBy": float(factor)})
-            else
+            else:
                 print "FLOOR is already met, not proceeding"
-        else
+        else:
             print "SCALE_FLOOR is not set, so scaling down. Potential to be below desired capacity."
             factor = "0." + os.environ.get("SCALE_DOWN_PERCENT")
             body = json.dumps({u"scaleBy": float(factor)})
