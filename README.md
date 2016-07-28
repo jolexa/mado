@@ -2,6 +2,8 @@
 mado is: Marathon Autoscaling Docker Oneshot, an attempt to autoscale your marathon apps
 --------
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/jolexa/mado.svg?maxAge=2592000?style=plastic)](https://hub.docker.com/r/jolexa/mado/)
+
 ## Vision
 The vision is to have a Docker image that will run once to autoscale marathon applications.
 
