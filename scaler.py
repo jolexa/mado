@@ -2,10 +2,10 @@
 
 import os
 import time
-import requests
 import json
 from datetime import timedelta
 from datetime import datetime
+import requests
 
 def get_current_count_by_group(group):
     # This is an rough science, as we are checking for the entire group, not an
@@ -62,7 +62,7 @@ def do_scaling(value):
     uri = "http://marathon.mesos:8080/v2/groups/" + os.environ.get('MARATHON_APP_GROUP')
     if body:
         print "DEBUG: Calling: {0}, with payload: {1}".format(uri, body)
-        r = requests.put(uri, data=body )
+        r = requests.put(uri, data=body)
         print r.text
 
 if os.environ.get('BACKEND_SERVICE') == "logicmonitor":
@@ -75,8 +75,9 @@ if os.environ.get('BACKEND_SERVICE') == "logicmonitor":
     epoch = int(time.time())
 
     payload = {'c': LM_COMPANY, 'u': LM_USER, 'p': LM_PASS, 'host': LM_HOST,
-        'dataSource': LM_DATASOURCE, 'dataPoint0': LM_DATAPOINT,
-        'start': epoch - 180, 'end': epoch }
+               'dataSource': LM_DATASOURCE, 'dataPoint0': LM_DATAPOINT,
+               'start': epoch - 180, 'end': epoch
+              }
     uri = "https://" + LM_COMPANY + ".logicmonitor.com/santaba/rpc/getData"
     r = requests.get(uri, params=payload)
 
@@ -102,7 +103,7 @@ elif os.environ.get('BACKEND_SERVICE') == "cloudwatch":
         StartTime=datetime.utcnow() - timedelta(minutes=3),
         EndTime=datetime.utcnow(),
         Period=60,
-        Statistics=[ AG_TYPE ],
+        Statistics=[AG_TYPE],
         Dimensions=[
             {'Name': os.environ.get('CW_DIMENSION_NAME'), 'Value': os.environ.get('CW_DIMENSION_VALUE')}
         ])
