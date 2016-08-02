@@ -10,11 +10,12 @@ import requests
 def get_current_count_by_group(group):
     # This is an rough science, as we are checking for the entire group, not an
     # individual application
-    uri = "http://marathon.mesos:8080/v2/groups/" + os.environ.get('MARATHON_APP_GROUP')
+    uri = "http://marathon.mesos:8080/v2/groups/" + group
     r = requests.get(uri)
     instances = 0
     for app in r.json()["apps"]:
         instances += app["instances"]
+    print "DEBUG: The group, {0} has a total of {1} instances running".format(group, instances)
     return instances
 
 def do_scaling(value):
