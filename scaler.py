@@ -48,7 +48,7 @@ def do_scaling(value):
         if FLOOR:
             if FLOOR < get_current_count_by_group(os.environ.get('MARATHON_APP_GROUP')):
                 print "SCALE_FLOOR is not met. Scaling Down.."
-                factor = "0." + os.environ.get("SCALE_DOWN_PERCENT")
+                factor = "0." + str(100 - int(os.environ.get("SCALE_DOWN_PERCENT")))
                 body = json.dumps({u"scaleBy": float(factor)})
             else:
                 print "FLOOR is already met, not proceeding"
