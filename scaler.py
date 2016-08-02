@@ -89,7 +89,7 @@ if os.environ.get('BACKEND_SERVICE') == "logicmonitor":
         if dp[2] != "NaN":
             value = dp[2]
             totalvalue += value
-    print "DEBUG: there is a cumulative queuedepth of: {0}, past 3 minutes".format(totalvalue)
+    print "DEBUG: Over the past 3 minutes, the datapoint, {1}, has added up to: {0}".format(totalvalue, LM_DATAPOINT)
     do_scaling(totalvalue)
 
 elif os.environ.get('BACKEND_SERVICE') == "cloudwatch":
