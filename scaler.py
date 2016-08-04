@@ -55,7 +55,7 @@ def do_scaling(value):
                 print "FLOOR is already met, not proceeding"
         else:
             print "SCALE_FLOOR is not set, so scaling down. Potential to be below desired capacity."
-            factor = "0." + os.environ.get("SCALE_DOWN_PERCENT")
+            factor = "0." + str(100 - int(os.environ.get("SCALE_DOWN_PERCENT")))
             body = json.dumps({u"scaleBy": float(factor)})
     else:
         print "No Change"
