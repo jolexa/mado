@@ -65,6 +65,9 @@ def do_scaling(value):
         print "DEBUG: Calling: {0}, with payload: {1}".format(uri, body)
         r = requests.put(uri, data=body)
         print r.text
+        # See what the current count is after the request
+        time.sleep(5)   # Allow deployment time to work. Not a science.
+        get_current_count_by_group(os.environ.get('MARATHON_APP_GROUP'))
 
 if os.environ.get('BACKEND_SERVICE') == "logicmonitor":
     LM_COMPANY = os.environ.get('LM_COMPANY')
